@@ -1,0 +1,18 @@
+# Python virtual environments
+CapstoneEnv/
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Streamlit / env secrets
+.streamlit/secrets.toml
+.env
+
+# Editor/OS junk
+.vscode/
+.DS_Store
+Thumbs.db
