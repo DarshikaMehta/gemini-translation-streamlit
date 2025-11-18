@@ -12,11 +12,11 @@ import getpass
  
 #Load API key securely: prefer Streamlit secrets or environment variable
 api_key = os.environ.get("GENAI_API_KEY") #or st.secrets.get("GENAI_API_KEY") if hasattr(st, "secrets") else None
-api_key ='AIzaSyBfwsHfjDP0mtFvPH3x3ZPWCRn3uu2_tbw' # getpass.getpass()
+#api_key ='AIzaSyBfwsHfjDP0mtFvPH3x3ZPWCRn3uu2_tbw' # getpass.getpass()
 if not api_key:
      #entered = st.text_input("Gemini API key (or set GENAI_API_KEY env var / Streamlit secrets)", type="password")
     try:
-        api_key=st.secrets["GEMINI_API_KEY"]
+        api_key=st.secrets["GENAI_API_KEY"]
         #if entered:
         # api_key = entered
     except Exception:
