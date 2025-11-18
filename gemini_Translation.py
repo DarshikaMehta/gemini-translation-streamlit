@@ -136,12 +136,13 @@ def main():
 
                     #Convert text to speech 
                     audio_file = text_to_Speech(translate_text, languages[selected_language])
-                    if audio_file:
-                        st.audio(audio_file, format ="audio/mp3")
+                    if audio_file and os.path.exists(audio_file): 
+                        #st.audio(audio_file, format ="audio/mp3")
                         with open(audio_file,'rb') as f:
                             audio_bytes = f.read()
-
-                            st.download_button('Downloaded audio',data=audio_bytes,file_name='translated_audio.mp3',mime="audio/mpeg")
+                        # use bytes instead of File_path
+                        st.audio(audio_bytes, format ="audio/mpeg")
+                        st.download_button('Downloaded audio',data=audio_bytes,file_name='translated_audio.mp3',mime="audio/mpeg")
                     else:
                         st.error('Failed to generate Audio')              
 
