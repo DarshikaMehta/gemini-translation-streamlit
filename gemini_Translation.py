@@ -5,7 +5,7 @@ from PyPDF2 import PdfReader
 import pandas as pd
 import os
 import tempfile
-source_text = ""
+#source_text=""
 text_input=""
 #step 2: Configure the Gemini API
 import getpass
@@ -119,11 +119,11 @@ def main():
         uploaded_file = st.file_uploader("upload a file (PDF, Excel or CSV)",type=['pdf','xlsx','csv'],)
         if uploaded_file is not None:
             st.info(f"uploaded File:{uploaded_file.name}")
-            source_text = extracted_text_from_file(uploaded_file)
-            text_input = source_text   
-            if source_text:
-                with st.expander("Preview extracted test"):
-                        st.write(source_text[:3000] + ("\n...\n(trucated)" if len(source_text)>3000 else ""))
+            text_input = extracted_text_from_file(uploaded_file) ## repalced source_text with text_input
+            #text_input = source_text   
+            if text_input: ##source_text:
+                with st.expander("Preview extracted text"):
+                        st.write(text_input[:3000] + ("\n...\n(trucated)" if len(text_input)>3000 else "")) ## again repalced source_text with text_input
 
 
     if st.button('Translate and Convert'):
@@ -142,7 +142,7 @@ def main():
                             audio_bytes = f.read()
                         # use bytes instead of File_path
                         st.audio(audio_bytes, format ="audio/mpeg")
-                        st.download_button('Downloaded audio',data=audio_bytes,file_name='translated_audio.mp3',mime="audio/mpeg")
+                        st.download_button('Download audio',data=audio_bytes,file_name='translated_audio.mp3',mime="audio/mpeg")
                     else:
                         st.error('Failed to generate Audio')              
 
