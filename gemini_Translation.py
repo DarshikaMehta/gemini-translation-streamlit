@@ -5,14 +5,12 @@ from PyPDF2 import PdfReader
 import pandas as pd
 import os
 import tempfile
-#source_text=""
 text_input=""
 #step 2: Configure the Gemini API
 import getpass
  
 #Load API key securely: prefer Streamlit secrets or environment variable
 api_key = os.environ.get("GENAI_API_KEY") #or st.secrets.get("GENAI_API_KEY") if hasattr(st, "secrets") else None
-#api_key ='AIzaSyBfwsHfjDP0mtFvPH3x3ZPWCRn3uu2_tbw' # getpass.getpass()
 if not api_key:
      #entered = st.text_input("Gemini API key (or set GENAI_API_KEY env var / Streamlit secrets)", type="password")
     try:
@@ -92,7 +90,35 @@ def extracted_text_from_file(uploaded_file) -> str:
      
     # STREAMLIT Application 
 def main():
-    st.title('Multi-Language Application by using GEMINI(API)')
+    with st.sidebar:
+        st.header("ℹ️ About this App")
+        st.write("""
+        This multilingual translation assistant is powered by **Google Gemini**  
+        and built using **Streamlit**.
+
+        **Capabilities:**
+        - Translate text into multiple languages  
+        - Upload PDF, Excel, or CSV documents for translation  
+        - Convert translated text to speech (MP3 audio)  
+        - Preview extracted text from files  
+
+        **Tech Stack:**  
+        Streamlit · Google Gemini · Python · gTTS · PyPDF2 · pandas  
+
+        **Live App URL:**  
+        https://gemini-translation-app-ammxgoduaapppl5hmsjvej9.streamlit.app
+        """)
+
+    st.write("---")
+    st.write("Developed as part of GenAI learning project.") 
+
+    #st.title('Multi-Language Application by using GEMINI(API)')
+    st.title("🌍 Multi-Language Translator using Google Gemini")
+
+    st.markdown("""
+        This AI-powered web application translates text or uploaded documents  
+        into multiple languages and generates natural MP3 speech output.
+    """)
 
     #Laungage Selection 
     languages = {
@@ -130,21 +156,22 @@ def main():
                 if text_input.strip() == "":
                     st.error('Please provide the text to translate')
                 else:
-                    translate_text = translate_text_gemini(text_input, selected_language)
-                    st.subheader('Translated text')
-                    st.write(translate_text) 
+                    with st.spinner("Translating text and generating audio..."):    
+                        translate_text = translate_text_gemini(text_input, selected_language)
+                        st.subheader('Translated text')
+                        st.write(translate_text) 
 
-                    #Convert text to speech 
-                    audio_file = text_to_Speech(translate_text, languages[selected_language])
-                    if audio_file and os.path.exists(audio_file): 
-                        #st.audio(audio_file, format ="audio/mp3")
-                        with open(audio_file,'rb') as f:
-                            audio_bytes = f.read()
-                        # use bytes instead of File_path
-                        st.audio(audio_bytes, format ="audio/mpeg")
-                        st.download_button('Download audio',data=audio_bytes,file_name='translated_audio.mp3',mime="audio/mpeg")
-                    else:
-                        st.error('Failed to generate Audio')              
+                        #Convert text to speech 
+                        audio_file = text_to_Speech(translate_text, languages[selected_language])
+                        if audio_file and os.path.exists(audio_file): 
+                            #st.audio(audio_file, format ="audio/mp3")
+                            with open(audio_file,'rb') as f:
+                                audio_bytes = f.read()
+                            # use bytes instead of File_path
+                            st.audio(audio_bytes, format ="audio/mpeg")
+                            st.download_button('Download audio',data=audio_bytes,file_name='translated_audio.mp3',mime="audio/mpeg")
+                        else:
+                            st.error('Failed to generate Audio')              
 
 if __name__ == "__main__":
      main()
